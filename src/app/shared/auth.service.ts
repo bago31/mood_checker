@@ -4,12 +4,15 @@ import firebase from "firebase";
 import {AngularFirestore} from "@angular/fire/firestore";
 import {User} from "./models/user.interface";
 import {Roles} from "./enums/roles";
+import {BehaviorSubject, from, Observable, Subject} from "rxjs";
+import {switchMap, tap} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
+loggedInUser$$ = new BehaviorSubject<User | null>(null);
+loggedInUser$ = this.loggedInUser$$.asObservable()
   constructor(private afAuth: AngularFireAuth,
               private afs: AngularFirestore) {}
 
@@ -18,8 +21,11 @@ export class AuthService {
       (userCredential) => this.handleUserCredential(userCredential)
     )
   }
+  updateLoggedInUser(user: User | null){
+  this.loggedInUser$$.next(user)
+  }
     addUserToDb(user: User){
-      this.afs.collection('users').add(user)
+      this.afs.collection('users').doc(user.uid).set(user)
     }
   handleUserCredential(userCredential: firebase.auth.UserCredential){
     if(userCredential?.user?.uid && userCredential?.user?.email) {
@@ -38,6 +44,17 @@ export class AuthService {
      lastName: 'worker'
    }
    return user
+  }
+
+  signIn(email: string,password: string): Observable<User>{
+  return from(this.afAuth.signInWithEmailAndPassword(email,password)).pipe(
+    switchMap(result => {
+       return this.afs.collection('users').doc(result.user?.uid).valueChanges() as Observable<User>
+    })
+  )
+  }
+  signOut(){
+    this.afAuth.signOut()
   }
 }
 
