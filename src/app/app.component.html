@@ -1,8 +1,9 @@
 
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <input type="text" formControlName="username" placeholder="Username">
+<form [formGroup]="loginForm">
+  <input type="text" formControlName="email" placeholder="Username">
   <input type="password" formControlName="password" placeholder="Password">
-  <button type="submit">Login</button>
 </form>
+<button (click)="adduser()">Login</button>
 
 <router-outlet></router-outlet>
+
