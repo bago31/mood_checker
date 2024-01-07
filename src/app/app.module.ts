@@ -9,10 +9,13 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import {ReactiveFormsModule} from "@angular/forms";
+import {WorkerModule} from "./modules/worker/worker.module";
+import {ManagerModule} from "./modules/manager/manager.module";
+import {AdminModule} from "./modules/admin/admin.module";
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -21,6 +24,9 @@ import {ReactiveFormsModule} from "@angular/forms";
     AngularFirestoreModule, // firestore
     AngularFireAuthModule,
     ReactiveFormsModule,
+    WorkerModule,
+    ManagerModule,
+    AdminModule
     // auth
   ],
   providers: [],
