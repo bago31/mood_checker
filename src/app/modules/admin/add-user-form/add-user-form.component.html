@@ -1,0 +1,13 @@
+<form [formGroup]="addUserForm">
+  <input type="text" formControlName="email" placeholder="E-mail">
+  <input type="password" formControlName="password" placeholder="Password">
+  <input type='text' formControlName="firstName" placeholder="First Name">
+  <input type='text' formControlName="lastName" placeholder="Last Name">
+  <select name="role" formControlName="role">
+    <option value="">Select role</option>
+    <option value = "2">Admin</option>
+    <option value="1">Manager</option>
+    <option value="0">Worker</option>
+  </select>
+</form>
+<button (click)="addUser()">Add user</button>

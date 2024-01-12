@@ -1,0 +1,4 @@
+<div *ngIf="loggedInUser|async as user">
+  <p>{{user.email}}</p>
+</div>
+<button (click)="logOut()" >Log out</button>

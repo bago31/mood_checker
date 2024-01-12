@@ -6,6 +6,7 @@ import {User} from "./models/user.interface";
 import {Roles} from "./enums/roles";
 import {BehaviorSubject, from, Observable, Subject} from "rxjs";
 import {switchMap, tap} from "rxjs/operators";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +15,13 @@ export class AuthService {
 loggedInUser$$ = new BehaviorSubject<User | null>(null);
 loggedInUser$ = this.loggedInUser$$.asObservable()
   constructor(private afAuth: AngularFireAuth,
-              private afs: AngularFirestore) {}
+              private afs: AngularFirestore,
+              private router: Router) {}
 
-  addUser(email: string, password: string){
+  addUser(email: string, password: string,role: Roles,firstName: string, lastName: string){
     this.afAuth.createUserWithEmailAndPassword(email,password).then(
-      (userCredential) => this.handleUserCredential(userCredential)
+      (userCredential) =>
+        this.handleUserCredential(userCredential,role,firstName,lastName)
     )
   }
   updateLoggedInUser(user: User | null){
@@ -27,21 +30,29 @@ loggedInUser$ = this.loggedInUser$$.asObservable()
     addUserToDb(user: User){
       this.afs.collection('users').doc(user.uid).set(user)
     }
-  handleUserCredential(userCredential: firebase.auth.UserCredential){
-    if(userCredential?.user?.uid && userCredential?.user?.email) {
-      const user = this.createUser(userCredential?.user?.uid,userCredential?.user?.email)
+  handleUserCredential(userCredential: firebase.auth.UserCredential,role:Roles,firstName:string,lastName:string){
+  const uid = userCredential?.user?.uid;
+  const email = userCredential?.user?.email;
+    if(uid && email) {
+      const user = this.createUser(
+        uid,
+        email,
+        role,
+        firstName,
+        lastName
+      )
       this.addUserToDb(user)
     } else {
       console.log('Incorrect result')
     }
   }
-  createUser(uid: string,email: string) {
+  createUser(uid: string,email: string,role: Roles,firstName: string,lastName: string) {
    const user: User = {
      uid: uid,
      email: email,
-     role: Roles.worker,
-     firstName: 'Secend',
-     lastName: 'worker'
+     role: role,
+     firstName: firstName,
+     lastName: lastName
    }
    return user
   }
@@ -54,7 +65,8 @@ loggedInUser$ = this.loggedInUser$$.asObservable()
   )
   }
   signOut(){
-    this.afAuth.signOut()
+    this.afAuth.signOut();
+    this.router.navigate(['/login'])
   }
 }
 

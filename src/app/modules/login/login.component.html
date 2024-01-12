@@ -1,0 +1,8 @@
+
+<form [formGroup]="loginForm">
+  <input type="text" formControlName="email" placeholder="E-mail">
+  <input type="password" formControlName="password" placeholder="Password">
+</form>
+<button (click)="logIn()">Login</button>
+<button (click)="logOut()">Wyloguj</button>
+
