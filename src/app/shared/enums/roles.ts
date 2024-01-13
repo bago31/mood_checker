@@ -1,5 +1,5 @@
 export enum Roles{
   worker,
-  moderator,
+  manager,
   admin
 }

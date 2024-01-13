@@ -9,6 +9,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import {ReactiveFormsModule} from "@angular/forms";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import {ReactiveFormsModule} from "@angular/forms";
     AngularFirestoreModule, // firestore
     AngularFireAuthModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
     // auth
   ],
   providers: [],

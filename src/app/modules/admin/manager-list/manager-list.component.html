@@ -1,1 +1,17 @@
-<p>manager-list works!</p>
+<p>menager works!</p>
+<p></p>
+
+<ng-container *ngIf="managerList$| async as managerList">
+  <div *ngFor="let worker of managerList">
+    <p>{{ worker.firstName }}</p>
+    <p>{{ worker.lastName }}</p>
+    <p>{{ worker.email }}</p>
+  </div>
+  <div *ngIf="managerList.length === 0">
+    <span>You don't have any manager</span>
+  </div>
+</ng-container>
+<button (click)="openAddUserModal()">Add new manager</button>
+
+
+

@@ -5,12 +5,13 @@ import {CommonModule} from "@angular/common";
 import {MenuComponent} from "./menu/menu.component";
 import {ManagerListComponent} from "./manager-list/manager-list.component";
 import {UserListComponent} from "./user-list/user-list.component";
-import {AddUserFormComponent} from "./add-user-form/add-user-form.component";
+import {AddUserModalComponent} from "./add-user-modal/add-user-modal.component";
 import {ReactiveFormsModule} from "@angular/forms";
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
-  declarations:[AdminComponent,MenuComponent,ManagerListComponent,UserListComponent,AddUserFormComponent],
-  imports: [AdminRoutingModule, CommonModule, ReactiveFormsModule],
+  declarations:[AdminComponent,MenuComponent,ManagerListComponent,UserListComponent,AddUserModalComponent],
+  imports: [AdminRoutingModule, CommonModule, ReactiveFormsModule,MatDialogModule],
   exports:[]
 })
 

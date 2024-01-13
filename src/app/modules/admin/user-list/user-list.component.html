@@ -1,1 +1,8 @@
 <p>user-list works!</p>
+<div *ngFor="let user of userList$ | async">
+  <p>{{user.firstName}}</p>
+  <p>{{user.lastName}}</p>
+  <p>{{user.email}}</p>
+
+
+</div>

@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
       case Roles.admin:
         this.goToAdmin()
         break;
-      case Roles.moderator:
+      case Roles.manager:
         this.goToManager();
         break;
       default:
