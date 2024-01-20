@@ -21,7 +21,7 @@ export class ManagerListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userDbService.getAllManager().subscribe((managerList) => {
+    this.userDbService.getAllActiveManager().subscribe((managerList) => {
       this.managerListStore.updateManagerList(managerList)
     })
   }

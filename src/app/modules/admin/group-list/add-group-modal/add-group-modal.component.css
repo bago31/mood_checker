@@ -1,0 +1,20 @@
+.container {
+  width: 100%;
+}
+
+.container input {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.columns {
+  display: flex;
+  justify-content: space-between;
+}
+
+.column {
+  flex: 1;
+  height: 200px; /* You can adjust this */
+  border: 1px solid #000; /* Just for visualization */
+  box-sizing: border-box;
+}

@@ -11,17 +11,30 @@ export class UserDbService {
   constructor(private afs: AngularFirestore) {
   }
 
-  getAllUsers(): Observable<User[]> {
-    return this.afs.collection('users').valueChanges() as Observable<User[]>
-  }
-
-  getAllWorker() {
-
-  }
-
-  getAllManager(): Observable<User[]> {
+  getAllActiveUsers(): Observable<User[]> {
     return this.afs.collection('users',
-      ref => ref.where('role', '==', Roles.manager))
+      ref => ref
+        .where('active', '==', true))
       .valueChanges() as Observable<User[]>
+  }
+
+  getAllActiveWorker() {
+    return this.afs.collection('users',
+      ref => ref
+        .where('role', '==', Roles.worker)
+        .where('active','==',true))
+      .valueChanges() as Observable<User[]>
+  }
+
+  getAllActiveManager(): Observable<User[]> {
+    return this.afs.collection('users',
+      ref => ref
+        .where('role', '==', Roles.manager)
+        .where('active', '==', true))
+      .valueChanges() as Observable<User[]>
+  }
+  deactivateUser(userUid: string): void{
+  const user = this.afs.collection('users').doc(userUid);
+  user.set({active: false },{merge: true});
   }
 }

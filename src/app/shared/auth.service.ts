@@ -52,7 +52,8 @@ loggedInUser$ = this.loggedInUser$$.asObservable()
      email: email,
      role: role,
      firstName: firstName,
-     lastName: lastName
+     lastName: lastName,
+     active: true
    }
    return user
   }

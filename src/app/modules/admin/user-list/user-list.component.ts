@@ -13,7 +13,10 @@ export class UserListComponent implements OnInit {
   constructor(private userDbService: UserDbService) { }
 
   ngOnInit(): void {
-    this.userList$ = this.userDbService.getAllUsers();
+    this.userList$ = this.userDbService.getAllActiveUsers();
   }
 
+  deleteUser(userUid: string){
+    this.userDbService.deactivateUser(userUid)
+  }
 }

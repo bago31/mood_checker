@@ -1,0 +1,37 @@
+<h1>Dodawanie grupy</h1>
+<div class="container">
+  <input type="text" placeholder="Team name" [(ngModel)]="teamName">
+  <div class="columns">
+    <div class="column">
+      <div *ngFor="let worker of workerList$|async">
+        <p>{{ worker.firstName }} {{ worker.lastName }}</p>
+        <button (click)="addWorkerToTeam(worker)">Add user to team</button>
+      </div>
+    </div>
+    <div
+      class="column">
+      <div *ngFor="let manager of managerList$|async">
+        <p>{{ manager.firstName }} {{ manager.lastName }}</p>
+        <button
+          [disabled]="!manager"
+          (click)="chooseManager(manager)">Choose manager
+        </button>
+      </div>
+    </div>
+    <div class="column">
+      <h6>Manager</h6>
+      <p>{{ manager?.firstName }}</p>
+      <button
+        *ngIf="manager"
+        (click)="unsetManager()">Cancel
+      </button>
+      <h6>Team members</h6>
+      <div *ngFor="let user of teamMembers$ | async">
+        <p>{{ user.firstName }}</p>
+        <button (click)="rollbackUserFromTeam(user)">Back</button>
+      </div>
+    </div>
+  </div>
+</div>
+<button>Create group</button>
+<button (click)="closeModal()">Cancel</button>
