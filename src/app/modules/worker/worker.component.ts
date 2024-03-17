@@ -1,12 +1,12 @@
 import {Component} from '@angular/core';
-import {User} from "../../shared/models/user.interface";
-import {AuthService} from "../../shared/auth.service";
-import {Observable, of} from "rxjs";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import { format } from "date-fns"
-import {WorkerService} from "./worker.service";
-import {switchMap, take} from "rxjs/operators";
-import {Moods} from "../../shared/enums/moods"
+import {User} from '../../shared/models/user.interface';
+import {AuthService} from '../../shared/auth.service';
+import {Observable, of} from 'rxjs';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {format} from 'date-fns';
+import {WorkerService} from './worker.service';
+import {switchMap, take} from 'rxjs/operators';
+import {Moods} from '../../shared/enums/moods';
 @Component({
   selector: 'app-worker',
   templateUrl: './worker.component.html',
@@ -15,7 +15,7 @@ import {Moods} from "../../shared/enums/moods"
 export class WorkerComponent{
   public loggedInUser: Observable<User|null>;
   public moodForm: FormGroup;
-  public date = format(new Date(),"yyyy-MM-dd");
+  public date = format(new Date(), 'yyyy-MM-dd');
   public moods = this.enumToArray(Moods);
   public isAdded: boolean;
   constructor(private authService: AuthService,
