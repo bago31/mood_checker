@@ -1,0 +1,103 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* this makes sure that wrapper will occupy full viewport height */
+  flex-direction: column; /* stack child elements vertically */
+  background: rgba(164, 164, 173, 0.5);
+  border-radius: 16px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  position: relative;
+}
+.grey-background{
+  background: rgba(164, 164, 173);
+  border-radius: 10px;
+  text-align: center;
+  padding: 15px;
+}
+h3{
+  font-size: 25px;
+}
+button{
+  display: inline-block;
+  outline: 0;
+  border: 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  cursor: pointer;
+  background-image: linear-gradient(to right,#d0a7b1,#957687);
+  border-radius: 6px;
+  padding: 10px 10px 10px;
+  white-space: nowrap;
+  margin-top: 10px;
+
+  :hover {
+    background-color: #e6375a;
+    background-image: none;
+  }
+}
+.log-out-button{
+  position: absolute;
+  top: 0;
+  right: 100px;
+  width: 200px;
+  background-color: #474f3f;
+  background-image: none;
+
+}
+form div{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+form div label {
+  display: flex;
+  flex-direction: column;
+  background-color: #a4a4ad;
+  padding: 10px;
+  width: 300px;
+  border-radius: 10PX;
+}
+input[type="radio"] {
+  /* Add if not using autoprefixer */
+  -webkit-appearance: none;
+  appearance: none;
+  /* For iOS < 15 to remove gradient background */
+  background-color: #fff;
+  /* Not removed via appearance */
+  margin: 0;
+}
+input[type="radio"] {
+  appearance: none;
+  background-color: #fff;
+  margin: 0;
+  font: inherit;
+  color: #957687;
+  width: 1.5em;
+  height: 1.5em;
+  border: 0.15em solid #957687;
+  border-radius: 50%;
+  transform: translateY(-0.075em);
+  display: grid;
+  place-content: center;
+  margin-top: 10px;
+}
+input[type="radio"]::before {
+  content: "";
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: 120ms transform ease-in-out;
+  box-shadow: inset 1em 1em #d0a7b1;
+}
+input[type="radio"]:checked::before {
+  transform: scale(1);
+}
+.form-control + .form-control {
+  margin-top: 1em;
+}
+
+

@@ -1,4 +1,54 @@
-<div *ngIf="loggedInUser|async as user">
-  <p>{{user.email}}</p>
+<div class="wrapper" *ngIf="!isAdded">
+  <div *ngIf="loggedInUser|async as user">
+    <p>{{ user.email }}</p>
+  </div>
+  <form [formGroup]="moodForm">
+
+    <div>
+      <label>
+        How do you feel today ?
+        <div *ngFor="let moodItem of moods; let index = index">
+          <input
+            type="radio"
+            [value]="moodItem.value"
+            formControlName="mood_yourself"
+            [id]="'mood'+ moodItem.value">
+          <label [for]="'mood'+moodItem.value">{{moodItem.label}}</label>
+        </div>
+      </label>
+
+      <label>
+        How do you feel about the organization today ?
+        <div *ngFor="let moodItem of moods; let index = index">
+          <input
+            type="radio"
+            [value]="moodItem.value"
+            formControlName="mood_organization"
+            [id]="'mood-organization'+ moodItem.value">
+          <label [for]="'mood-organization'+moodItem.value">{{moodItem.label}}</label>
+        </div>
+      </label>
+
+    <label>
+      How do you feel about your team today ?
+      <div *ngFor="let moodItem of moods; let index = index">
+        <input
+          type="radio"
+          [value]="moodItem.value"
+          formControlName="mood_team"
+          [id]="'mood-team'+ moodItem.value">
+        <label [for]="'mood-team'+moodItem.value">{{moodItem.label}}</label>
+      </div>
+    </label>
+    </div>
+
+  </form>
+  <button (click)="sendForm()">Send form</button>
+  <button class="log-out-button" (click)="logOut()">Log out</button>
 </div>
-<button (click)="logOut()" >Log out</button>
+<div class="wrapper" *ngIf="isAdded">
+  <div class="grey-background"><h3>Thank you</h3>
+    <p>The data today has already been completed.
+      You are welcome to join us tomorrow</p></div>
+  <button class="log-out-button" (click)="logOut()">Log out</button>
+</div>

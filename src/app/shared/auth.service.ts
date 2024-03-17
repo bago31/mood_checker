@@ -12,28 +12,33 @@ import {Router} from "@angular/router";
   providedIn: 'root'
 })
 export class AuthService {
-loggedInUser$$ = new BehaviorSubject<User | null>(null);
-loggedInUser$ = this.loggedInUser$$.asObservable()
+  loggedInUser$$ = new BehaviorSubject<User | null>(null);
+  loggedInUser$ = this.loggedInUser$$.asObservable()
+
   constructor(private afAuth: AngularFireAuth,
               private afs: AngularFirestore,
-              private router: Router) {}
+              private router: Router) {
+  }
 
-  addUser(email: string, password: string,role: Roles,firstName: string, lastName: string){
-    this.afAuth.createUserWithEmailAndPassword(email,password).then(
+  addUser(email: string, password: string, role: Roles, firstName: string, lastName: string) {
+    this.afAuth.createUserWithEmailAndPassword(email, password).then(
       (userCredential) =>
-        this.handleUserCredential(userCredential,role,firstName,lastName)
+        this.handleUserCredential(userCredential, role, firstName, lastName)
     )
   }
-  updateLoggedInUser(user: User | null){
-  this.loggedInUser$$.next(user)
+
+  updateLoggedInUser(user: User | null) {
+    this.loggedInUser$$.next(user)
   }
-    addUserToDb(user: User){
-      this.afs.collection('users').doc(user.uid).set(user)
-    }
-  handleUserCredential(userCredential: firebase.auth.UserCredential,role:Roles,firstName:string,lastName:string){
-  const uid = userCredential?.user?.uid;
-  const email = userCredential?.user?.email;
-    if(uid && email) {
+
+  addUserToDb(user: User) {
+    this.afs.collection('users').doc(user.uid).set(user)
+  }
+
+  handleUserCredential(userCredential: firebase.auth.UserCredential, role: Roles, firstName: string, lastName: string) {
+    const uid = userCredential?.user?.uid;
+    const email = userCredential?.user?.email;
+    if (uid && email) {
       const user = this.createUser(
         uid,
         email,
@@ -46,26 +51,28 @@ loggedInUser$ = this.loggedInUser$$.asObservable()
       console.log('Incorrect result')
     }
   }
-  createUser(uid: string,email: string,role: Roles,firstName: string,lastName: string) {
-   const user: User = {
-     uid: uid,
-     email: email,
-     role: role,
-     firstName: firstName,
-     lastName: lastName,
-     active: true
-   }
-   return user
+
+  createUser(uid: string, email: string, role: Roles, firstName: string, lastName: string) {
+    const user: User = {
+      uid: uid,
+      email: email,
+      role: role,
+      firstName: firstName,
+      lastName: lastName,
+      active: true
+    }
+    return user
   }
 
-  signIn(email: string,password: string): Observable<User>{
-  return from(this.afAuth.signInWithEmailAndPassword(email,password)).pipe(
-    switchMap(result => {
-       return this.afs.collection('users').doc(result.user?.uid).valueChanges() as Observable<User>
-    })
-  )
+  signIn(email: string, password: string): Observable<User> {
+    return from(this.afAuth.signInWithEmailAndPassword(email, password)).pipe(
+      switchMap(result => {
+        return this.afs.collection('users').doc(result.user?.uid).valueChanges() as Observable<User>
+      })
+    )
   }
-  signOut(){
+
+  signOut() {
     this.afAuth.signOut();
     this.router.navigate(['/login'])
   }

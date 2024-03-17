@@ -8,8 +8,6 @@ export class AddGroupModalService {
   workerList$$ = new BehaviorSubject<User[]>([]);
   workerList$ = this.workerList$$.asObservable();
 
-  managerList$$ = new BehaviorSubject<User[] | null>(null)
-
   teamMemberList$$ = new BehaviorSubject<User[]>([]);
   teamMemberList$ = this.teamMemberList$$.asObservable();
 

@@ -8,7 +8,6 @@ import {ManagerRoutingModule} from './manager-routing.module'
   declarations: [
     ManagerComponent
   ],
-  imports:[CommonModule, ManagerRoutingModule]
 })
 
 export class ManagerModule { }

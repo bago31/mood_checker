@@ -5,6 +5,8 @@ import {UserDbService} from "../../user-db.service";
 import {Observable} from "rxjs";
 import {AddGroupModalService} from "./add-group-modal.service";
 import {take} from "rxjs/operators";
+import {Group} from "../../../../shared/models/group.interface";
+import {GroupDbService} from "../../group-db.service";
 
 @Component({
   selector: 'app-add-group-modal',
@@ -21,7 +23,8 @@ export class AddGroupModalComponent implements OnInit {
 
   constructor(private userDbService: UserDbService,
               private addGroupModalService: AddGroupModalService,
-              private dialogRef: MatDialogRef<AddGroupModalComponent>) {
+              private dialogRef: MatDialogRef<AddGroupModalComponent>,
+              private groupDbService: GroupDbService) {
   }
 
   ngOnInit(): void {
@@ -62,9 +65,15 @@ export class AddGroupModalComponent implements OnInit {
     )
   }
 
-  createTeam() {
-
-  }
+  createTeam(members: User[]|null) {
+    if (!this.manager) return
+    const team: Group = {
+      name: this.teamName,
+      managerId: this.manager?.uid,
+      members: members,
+    }
+    this.groupDbService.addGroup(team)
+    }
 
 
 }
