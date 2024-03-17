@@ -19,9 +19,14 @@ export class UserDbService {
         .where('active', '==', true))
       .valueChanges() as Observable<User[]>
   }
-  getMoodsForUser(userId: string, ): Observable<Mood[]> {
-    return this.afs.collection(`users/${userId}/moods`).valueChanges() as Observable<Mood[]>
 
+  getMoodsForUser(userId: string,): Observable<Mood[]> {
+    return this.afs.collection(`users/${userId}/moods`).valueChanges() as Observable<Mood[]>
+  }
+
+  getMoodForUserForDate(userId: string,date: string){
+    return this.afs.collection(`users/${userId}/moods`,ref => ref
+      .where('date', '==', date)).valueChanges() as Observable<Mood[]>
   }
 
   getAllActiveWorker() {

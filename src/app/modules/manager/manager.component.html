@@ -3,22 +3,32 @@
   <div *ngFor="let user of userList$ | async">
     <button (click)="getUserData(user.uid)">{{user.firstName}} {{user.lastName}} {{user.email}}</button>
 </div>
+  <button (click)="unsetIsUserSelect()">All users</button>
 </div>
-<div *ngIf="userMoodList$| async">
-  <div *ngFor="let mood of userMoodList$ | async">
-    <div>{{mood.date}}</div>
-    <div>{{mood.mood_organization}}</div>
-    <div>{{mood.mood_team}}</div>
-    <div>{{mood.mood_yourself}}</div>
-  </div>
-
-<!--  <div>
+<div *ngIf="!isUserSelect">
+ <div class="all-users-chars-container">
+   <div  *ngFor="let user of userList$ | async"  class="char-container" >
+<!--     <canvas baseChart
+             [datasets]="barChartData"
+             [labels]="barChartLabels"
+             [options]="barChartOptions"
+             [chartType]="'bar'">
+     </canvas>-->
+   </div>
+ </div>
+</div>
+<div *ngIf="isUserSelect">
+  <div *ngIf="barChartData" class="char-container" >
     <canvas baseChart
             [datasets]="barChartData"
             [labels]="barChartLabels"
             [options]="barChartOptions"
-            [chartType]="barChartType">
+            [chartType]="'bar'">
     </canvas>
-  </div>-->
+  </div>
+</div>
+<div *ngIf="userMoodList$| async">
+  <div *ngFor="let mood of userMoodList$ | async">
 
+  </div>
 </div>

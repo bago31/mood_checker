@@ -52,7 +52,7 @@ export class WorkerComponent{
     )
   }
 
-  logOut(){
+  logOut(): void{
     this.authService.signOut();
   }
 
@@ -63,12 +63,66 @@ export class WorkerComponent{
   }
 
   sendForm(){
-    const mood_yourself: any = this.moodForm.get('mood_yourself')?.value
-    const mood_team: any = this.moodForm.get('mood_team')?.value
-    const mood_organization: any = this.moodForm.get('mood_organization')?.value
-    const user = this.loggedInUser.pipe(take(1)).subscribe((user) => {
+    const mood_yourself: any = this.moodForm.get('mood_yourself')?.value;
+    const mood_team: any = this.moodForm.get('mood_team')?.value;
+    const mood_organization: any = this.moodForm.get('mood_organization')?.value;
+    this.loggedInUser.pipe(take(1)).subscribe((user) => {
       if(user){
-      this.workerService.addMoodForUser(mood_yourself,mood_team,mood_organization,user.uid, this.date);}
+      this.workerService.addMoodForUser(mood_yourself,mood_team,mood_organization,user.uid, this.date);
+      }
     })
   }
+/*
+  getRandomInt(): number {
+    const min = 1;
+    const max = 5;
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+*/
+/*
+  genereteDate(){
+    const dateArr = [
+      "2024-03-01",
+      "2024-03-02",
+      "2024-03-03",
+      "2024-03-04",
+      "2024-03-05",
+      "2024-03-06",
+      "2024-03-07",
+      "2024-03-08",
+      "2024-03-09",
+      "2024-03-10",
+      "2024-03-11",
+      "2024-03-12",
+      "2024-03-13",
+      "2024-03-14",
+      "2024-03-15",
+      "2024-03-16",
+      "2024-03-17",
+      "2024-03-18",
+      "2024-03-19",
+      "2024-03-20",
+      "2024-03-21",
+      "2024-03-22",
+      "2024-03-23",
+      "2024-03-24",
+      "2024-03-25",
+      "2024-03-26",
+      "2024-03-27",
+      "2024-03-28",
+      "2024-03-29",
+      "2024-03-30",
+      "2024-03-31"
+    ]
+    this.loggedInUser.pipe(take(1)).subscribe((user) => {
+      if(user){
+       dateArr.forEach(date => {
+         const mood_yourself: any = this.getRandomInt()
+         const mood_team: any = this.getRandomInt()
+         const mood_organization: any = this.getRandomInt()
+         this.workerService.addMoodForUser(mood_yourself,mood_team,mood_organization,user.uid, date)});
+      }
+    })
+  }
+*/
 }
