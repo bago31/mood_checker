@@ -1,19 +1,24 @@
-<div>
+<div *ngFor="let user of userList$ | async">
   <h3>User list</h3>
-  <div *ngFor="let user of userList$ | async">
+  <div>
     <button (click)="getUserData(user.uid)">{{user.firstName}} {{user.lastName}} {{user.email}}</button>
 </div>
   <button (click)="unsetIsUserSelect()">All users</button>
+<div *ngIf="isUserSelect">
+  <button>Day</button>
+  <button>Week</button>
+  <button (click)="getUserDataForWeek(user.uid)">Month</button>
+</div>
 </div>
 <div *ngIf="!isUserSelect">
  <div class="all-users-chars-container">
-   <div  *ngFor="let user of userList$ | async"  class="char-container" >
-<!--     <canvas baseChart
-             [datasets]="barChartData"
+   <div  *ngFor="let config of charConfigList$ | async"  class="char-container" >
+     <canvas baseChart
+             [datasets]="config"
              [labels]="barChartLabels"
              [options]="barChartOptions"
              [chartType]="'bar'">
-     </canvas>-->
+     </canvas>
    </div>
  </div>
 </div>

@@ -17,24 +17,31 @@ export class UserDbService {
     return this.afs.collection('users',
       ref => ref
         .where('active', '==', true))
-      .valueChanges() as Observable<User[]>
+      .valueChanges() as Observable<User[]>;
   }
 
-  getMoodsForUser(userId: string,): Observable<Mood[]> {
-    return this.afs.collection(`users/${userId}/moods`).valueChanges() as Observable<Mood[]>
+  getMoodsForUser(userId: string): Observable<Mood[]> {
+    return this.afs.collection(`users/${userId}/moods`).valueChanges() as Observable<Mood[]>;
   }
 
-  getMoodForUserForDate(userId: string,date: string){
-    return this.afs.collection(`users/${userId}/moods`,ref => ref
-      .where('date', '==', date)).valueChanges() as Observable<Mood[]>
+  getMoodForUserForDate(userId: string, date: string){
+    return this.afs.collection(`users/${userId}/moods`, ref => ref
+      .where('date', '==', date)).valueChanges() as Observable<Mood[]>;
+  }
+  getMoodForUserForWeek(userId: string, startDate: string, endDate: string): Observable<Mood[]> {
+    return this.afs
+      .collection(`users/${userId}/moods`, ref => ref
+        .where('date', '>=', startDate)
+        .where('date', '<=', endDate))
+      .valueChanges() as Observable<Mood[]>;
   }
 
   getAllActiveWorker() {
     return this.afs.collection('users',
       ref => ref
         .where('role', '==', Roles.worker)
-        .where('active','==',true))
-      .valueChanges() as Observable<User[]>
+        .where('active', '==', true))
+      .valueChanges() as Observable<User[]>;
   }
 
   getAllActiveManager(): Observable<User[]> {
@@ -42,7 +49,7 @@ export class UserDbService {
       ref => ref
         .where('role', '==', Roles.manager)
         .where('active', '==', true))
-      .valueChanges() as Observable<User[]>
+      .valueChanges() as Observable<User[]>;
   }
   deactivateUser(userUid: string): void{
   const user = this.afs.collection('users').doc(userUid);
