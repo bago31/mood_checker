@@ -9,7 +9,7 @@ import {ChartsModule} from 'ng2-charts'
   declarations: [
     ManagerComponent
   ],
-  imports: [CommonModule, ManagerRoutingModule, ChartsModule]
+  imports: [CommonModule, ManagerRoutingModule, ChartsModule],
 })
 
 export class ManagerModule {

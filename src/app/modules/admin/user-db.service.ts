@@ -1,9 +1,9 @@
-import {Injectable} from "@angular/core";
-import {AngularFirestore} from "@angular/fire/firestore";
-import {Observable} from "rxjs";
-import {User} from "../../shared/models/user.interface";
-import {Roles} from "../../shared/enums/roles";
-import {Mood} from "../../shared/models/mood.interface";
+import {Injectable} from '@angular/core';
+import {AngularFirestore} from '@angular/fire/firestore';
+import {Observable} from 'rxjs';
+import {User} from '../../shared/models/user.interface';
+import {Roles} from '../../shared/enums/roles';
+import {Mood} from '../../shared/models/mood.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +20,6 @@ export class UserDbService {
       .valueChanges() as Observable<User[]>;
   }
 
-  getMoodsForUser(userId: string): Observable<Mood[]> {
-    return this.afs.collection(`users/${userId}/moods`).valueChanges() as Observable<Mood[]>;
-  }
-
   getMoodForUserForDate(userId: string, date: string){
     return this.afs.collection(`users/${userId}/moods`, ref => ref
       .where('date', '==', date)).valueChanges() as Observable<Mood[]>;
@@ -36,7 +32,7 @@ export class UserDbService {
       .valueChanges() as Observable<Mood[]>;
   }
 
-  getAllActiveWorker() {
+getAllActiveWorker() {
     return this.afs.collection('users',
       ref => ref
         .where('role', '==', Roles.worker)

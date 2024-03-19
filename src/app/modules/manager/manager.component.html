@@ -1,39 +1,18 @@
-<div *ngFor="let user of userList$ | async">
   <h3>User list</h3>
-  <div>
+<div *ngIf="userList$ | async as users">
+  <div *ngFor="let user of users">
     <button (click)="getUserData(user.uid)">{{user.firstName}} {{user.lastName}} {{user.email}}</button>
 </div>
-  <button (click)="unsetIsUserSelect()">All users</button>
-<div *ngIf="isUserSelect">
-  <button>Day</button>
-  <button>Week</button>
-  <button (click)="getUserDataForWeek(user.uid)">Month</button>
-</div>
-</div>
-<div *ngIf="!isUserSelect">
- <div class="all-users-chars-container">
-   <div  *ngFor="let config of charConfigList$ | async"  class="char-container" >
-     <canvas baseChart
-             [datasets]="config"
-             [labels]="barChartLabels"
-             [options]="barChartOptions"
-             [chartType]="'bar'">
-     </canvas>
-   </div>
- </div>
-</div>
-<div *ngIf="isUserSelect">
+<div *ngIf="selectedUser$ | async as user">
   <div *ngIf="barChartData" class="char-container" >
     <canvas baseChart
             [datasets]="barChartData"
             [labels]="barChartLabels"
             [options]="barChartOptions"
-            [chartType]="'bar'">
+            [chartType]="charType">
     </canvas>
-  </div>
+  <button (click)="getUserData(user)">Day</button>
+  <button (click)="getUserDataForWeek(user)">Week</button>
+  <button (click)="getUserDataForMonth(user)">Month</button>
 </div>
-<div *ngIf="userMoodList$| async">
-  <div *ngFor="let mood of userMoodList$ | async">
-
-  </div>
 </div>

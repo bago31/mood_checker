@@ -3,10 +3,18 @@ import {UserDbService} from '../admin/user-db.service';
 import {Observable, ReplaySubject} from 'rxjs';
 import {User} from '../../shared/models/user.interface';
 import {Mood} from '../../shared/models/mood.interface';
-import {ChartDataSets, ChartOptions} from 'chart.js';
+import {ChartDataSets, ChartOptions, ChartType} from 'chart.js';
 import {Label} from 'ng2-charts';
-import {eachDayOfInterval, format, isFriday, isMonday, isWeekend, nextFriday, previousFriday, previousMonday} from 'date-fns';
-
+import {
+  eachDayOfInterval,
+  endOfMonth, endOfWeek,
+  format,
+ startOfISOWeek,
+  startOfMonth,  subDays
+} from 'date-fns';
+import {ManagerStore} from './manager.store';
+import {endOfWeekWithOptions} from 'date-fns/fp';
+import {take} from 'rxjs/operators';
 @Component({
   selector: 'app-manager',
   templateUrl: './manager.component.html',
@@ -14,12 +22,13 @@ import {eachDayOfInterval, format, isFriday, isMonday, isWeekend, nextFriday, pr
 })
 export class ManagerComponent implements OnInit {
   userList$: Observable<User[]>;
-  userMoodList$: Observable<Mood[]>;
-  charConfigList$ = new ReplaySubject<any[]>();
+  isSelectedUser$: Observable<boolean>;
+  selectedUser$: Observable<string | null>;
+  selectedCharType$: Observable<any>;
   todayDate: string = format(new Date(), 'yyyy-MM-dd');
-  isUserSelect: boolean;
   barChartData: ChartDataSets[];
   barChartLabels: Label[];
+  charType: ChartType = 'bar';
   barChartOptions: ChartOptions = {
     responsive: true,
     scales: {
@@ -31,47 +40,61 @@ export class ManagerComponent implements OnInit {
     }
   };
 
-  constructor(private userDbService: UserDbService) {
+  constructor(
+    private userDbService: UserDbService,
+    private managerStore: ManagerStore) {
   }
 
   ngOnInit(): void {
     this.userList$ = this.userDbService.getAllActiveWorker();
-    this.userDbService.getAllActiveWorker().subscribe(res => this.getUsersData(res));
+    this.isSelectedUser$ = this.managerStore.isSelectedUser$;
+    this.selectedUser$ = this.managerStore.selectedUser$;
+    this.selectedCharType$ = this.managerStore.selectedCharType$;
   }
 
-  getUsersData(users: User[]): void{
-    const configList: any[] = [];
-    users.forEach(user => {
-      this.userDbService.getMoodForUserForDate(user.uid, this.todayDate).subscribe(
-        res => {
-          configList.push(this.generateDataForSelectedEmployee(res[0]));
-          this.charConfigList$.next(configList);
-        });
-    });
-  }
   getUserData(userId: string): void {
-    this.setIsUserSelect();
-    this.userDbService.getMoodForUserForDate(userId, this.todayDate).subscribe((res => {
+    this.managerStore.selectEmployee(userId);
+    this.userDbService.getMoodForUserForDate(userId, this.todayDate)
+      .pipe(take(1))
+      .subscribe((res => {
         this.barChartData = this.generateDataForSelectedEmployee(res[0]);
         this.barChartLabels = ['Org', 'Team', 'Yourself'];
     }));
   }
-  getUserDataForWeek(userId: string){
-    const week = this.weekCheck();
-    this.userDbService.getMoodForUserForWeek(userId, format(week[0], 'yyyy-MM-dd'), format(week[4], 'yyyy-MM-dd')).subscribe(
+
+  getUserDataForMonth(userId: string): void{
+    const month = this.month();
+    this.userDbService.getMoodForUserForWeek(userId, format(month[0], 'yyyy-MM-dd'), format(month[month.length - 1], 'yyyy-MM-dd'))
+      .pipe(take(1))
+      .subscribe(
       res => {
-        console.log(res);
+        this.barChartLabels = month.map(date => format(date, 'yyyy-MM-dd'));
+        const data: any[] = [];
+        res.forEach(mood => data.push(mood.mood_team));
+        this.charType = 'line';
+        this.barChartData = [
+          {data, label: 'Month team mood'}
+        ];
       }
     );
   }
 
-  setIsUserSelect(): void {
-    this.isUserSelect = true;
+  getUserDataForWeek(userId: string): void {
+    const week = this.week();
+    this.userDbService.getMoodForUserForWeek(userId, format(week[0], 'yyyy-MM-dd'), format(week[4], 'yyyy-MM-dd'))
+      .pipe(take(1))
+      .subscribe(
+      res => {
+        this.barChartLabels = week.map(date => format(date, 'yyyy-MM-dd'));
+        const data: any[] = [];
+        res.forEach(mood => data.push(mood.mood_team));
+        this.barChartData = [
+          {data, label: 'Week team mood'}
+        ];
+      }
+    );
   }
 
-  unsetIsUserSelect(): void {
-    this.isUserSelect = false;
-  }
 
   generateDataForSelectedEmployee(mood: Mood): ChartDataSets[] {
   const todayMoodArray = [mood.mood_organization, mood.mood_team, mood.mood_yourself];
@@ -79,39 +102,24 @@ export class ManagerComponent implements OnInit {
     {data: todayMoodArray, label: 'Day mood'}
   ];
   }
-  weekCheck(): Date[] {
+
+  month(): Date[] {
     const today = new Date();
-    if (isMonday(today)){
-      const startWeekDate = today;
-      const endWeekDate: any = nextFriday(today);
-      return eachDayOfInterval({
-        start: startWeekDate,
-        end: endWeekDate
-      });
-    }
-    else if (isFriday(today)){
-      const startWeekDate = previousMonday(today);
-      const endWeekDate: any = today;
-      return eachDayOfInterval({
-        start: startWeekDate,
-        end: endWeekDate
-      });
-    }
-    else if (isWeekend(today)){
-      const startWeekDate = previousMonday(today);
-      const endWeekDate: any = previousFriday(today);
-      return eachDayOfInterval({
-        start: startWeekDate,
-        end: endWeekDate
-      });
-    }
-    else {
-      const startWeekDate = previousMonday(today);
-      const endWeekDate: any = nextFriday(today);
-      return eachDayOfInterval({
-        start: startWeekDate,
-        end: endWeekDate
-      });
-    }
+    const startMonth = startOfMonth(today);
+    const endMonth = endOfMonth(today);
+    return eachDayOfInterval({
+      start: startMonth,
+      end: endMonth
+    });
+  }
+
+  week(): Date[]{
+    const today = new Date();
+    const startWeek = startOfISOWeek(today);
+    const endWeek = subDays(endOfWeek(today), 1);
+    return eachDayOfInterval({
+      start: startWeek,
+      end: endWeek
+    });
   }
 }
